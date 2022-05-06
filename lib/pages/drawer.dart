@@ -1,6 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:job4u/business_logic/cubit/auth_cubit/auth_cubit.dart';
 import 'package:job4u/constant/comstants.dart';
+import 'package:job4u/models/user_model.dart';
 import 'package:job4u/pages/aboutUs.dart';
 import 'package:job4u/pages/sections/DoctorSection.dart';
 import 'package:job4u/pages/sections/EducationSection.dart';
@@ -14,14 +19,15 @@ import 'package:job4u/pages/sections/programmingSection.dart';
 import 'package:job4u/pages/sections/scienceSection.dart';
 import 'package:job4u/services/colors.dart';
 
-import '../business_logic/cubit/app_cubit.dart';
+import '../constant/bloc_observer.dart';
 
 class DrawerMenu extends StatelessWidget {
   const DrawerMenu({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-  var _cubit=  BlocProvider.of<AppCubit>(context);
+    var _cubit = BlocProvider.of<AuthCubit>(context);
+    _cubit.fetchUSerInfo();
     return Drawer(
       child: ListView(
         children: <Widget>[
@@ -32,8 +38,27 @@ class DrawerMenu extends StatelessWidget {
                 backgroundImage: const AssetImage(
                     'assets/images/Cartoon-Pic-Ideas-for-DP-Profile-02-768x768-removebg-preview.png'),
               ),
-              accountName:  Text('Ahmed Raafat'),
-              accountEmail:  Text(_cubit.getLoginUser().email!)),
+              accountName: FutureBuilder(
+                future: _cubit.fetchUSerInfo(),
+                builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                  if (snapshot.hasError) {
+                    return Text("Something went wrong");
+                  }
+
+                  if (snapshot.hasData && !snapshot.data!.exists) {
+                    return Text("Document does not exist");
+                  }
+
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    Map<String, dynamic> data =
+                        snapshot.data!.data() as Map<String, dynamic>;
+                    return Text(data['name']);
+                  }
+
+                  return Text("loading");
+                },
+              ),
+              accountEmail: Text(_cubit.getLoginUser().email!)),
           ListTile(
             leading: const Icon(Icons.home),
             title: const Text('Home'),
@@ -166,7 +191,7 @@ class DrawerMenu extends StatelessWidget {
             },
           ),
           ListTile(
-            leading:  Icon(
+            leading: Icon(
               Icons.logout,
               color: Colors.red,
             ),

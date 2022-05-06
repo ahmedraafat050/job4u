@@ -1,23 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:job4u/business_logic/cubit/app_cubit.dart';
-import 'package:job4u/pages/drawer.dart';
+import 'package:job4u/business_logic/cubit/auth_cubit/auth_cubit.dart';
 import 'package:job4u/pages/homePage.dart';
 import 'package:job4u/pages/loadingPage.dart';
 import 'package:job4u/pages/signInPage.dart';
 import 'package:job4u/pages/signUpPage.dart';
-import 'business_logic/cubit/login_cubit/login_cubit.dart';
-import 'business_logic/cubit/register_cubit/register_cubit.dart';
+
 import 'constant/comstants.dart';
 
 class AppRouter {
-  late LoginCubit loginCubit;
-  late RegisterCubit registerCubit;
+  late AuthCubit loginCubit;
+
 
   AppRouter() {
     late String initialRoute;
-    loginCubit = LoginCubit();
-    registerCubit = RegisterCubit();
+    loginCubit = AuthCubit();
+
   }
 
   Route? generateRoute(RouteSettings settings) {
@@ -28,29 +26,23 @@ class AppRouter {
       case signInPage:
         return MaterialPageRoute(
             builder: (_) => BlocProvider(
-                  create: (context) => LoginCubit(),
+                  create: (context) => AuthCubit(),
                   child: SignInPage(),
                 ));
       case signUpPage:
         return MaterialPageRoute(
             builder: (_) => BlocProvider(
-                  create: (context) => RegisterCubit(),
+                  create: (context) => AuthCubit(),
                   child: SignUpPage(),
                 ));
 
       case home:
         return MaterialPageRoute(
             builder: (_) => BlocProvider(
-                  create: (context) => AppCubit(),
+                  create: (context) => AuthCubit(),
                   child: homePage(),
                 ));
 
-      // case drawer:
-      //   return MaterialPageRoute(
-      //       builder: (_) => BlocProvider(
-      //             create: (context) => AppCubit(),
-      //             child: DrawerMenu(),
-      //           ));
     }
   }
 }

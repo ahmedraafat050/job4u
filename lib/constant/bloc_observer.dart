@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyBlocObserver extends BlocObserver {
@@ -27,7 +28,5 @@ class MyBlocObserver extends BlocObserver {
 }
 
 
-String token ="";
-String uId ="";
 
 

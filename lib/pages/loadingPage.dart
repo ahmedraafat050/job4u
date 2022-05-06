@@ -2,8 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:job4u/business_logic/cubit/app_cubit.dart';
-import 'package:job4u/business_logic/cubit/login_cubit/login_cubit.dart';
+
 import 'package:job4u/constant/comstants.dart';
 
 import '../services/colors.dart';
@@ -36,6 +35,12 @@ class _loadingPageState extends State<loadingPage> {
         });
       }
     });
+  }
+  @override
+  void dispose() {
+    _navigatetohome;
+    super.dispose();
+
   }
 
   @override

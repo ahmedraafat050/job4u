@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:job4u/business_logic/cubit/app_cubit.dart';
+import 'package:job4u/business_logic/cubit/auth_cubit/auth_cubit.dart';
+import 'package:job4u/constant/bloc_observer.dart';
 import 'package:job4u/pages/aboutUs.dart';
 import 'package:job4u/pages/drawer.dart';
 import 'package:job4u/pages/searchPage.dart';
@@ -14,6 +15,7 @@ class homePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xff787470),
@@ -62,7 +64,7 @@ class homePage extends StatelessWidget {
         ),
       ),
       drawer: BlocProvider(
-        create: (context) => AppCubit(),
+        create: (context) => AuthCubit(),
         child: DrawerMenu(),
       ),
       body: Container(

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:job4u/business_logic/cubit/register_cubit/register_cubit.dart';
+import 'package:job4u/business_logic/cubit/auth_cubit/auth_cubit.dart';
+import 'package:job4u/business_logic/cubit/auth_cubit/auth_cubit.dart';
 import 'package:job4u/pages/homePage.dart';
 import 'package:job4u/pages/signUpPage.dart';
 import 'package:job4u/services/colors.dart';
 
-import '../business_logic/cubit/login_cubit/login_cubit.dart';
 import '../services/TextField.dart';
 
 var _formKey = new GlobalKey<FormState>();
@@ -17,10 +17,12 @@ class SignInPage extends StatelessWidget {
   var passwordController = TextEditingController();
 
 
+
+
   @override
   Widget build(BuildContext context) {
-    var cubit = BlocProvider.of<LoginCubit>(context);
-    return BlocConsumer<LoginCubit, LoginState>(
+    var cubit = BlocProvider.of<AuthCubit>(context);
+    return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is LoginSuccessState) {
           Navigator.pushReplacement(
@@ -145,7 +147,7 @@ class SignInPage extends StatelessWidget {
                             MaterialPageRoute(
                                 builder: (context) =>
                                     BlocProvider(
-                                      create: (context) => RegisterCubit(),
+                                      create: (context) => AuthCubit(),
                                       child: SignUpPage(),
                                     )));
                       },

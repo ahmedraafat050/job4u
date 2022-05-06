@@ -6,3 +6,4 @@ const home = 'home';
 const loading = 'loading';
 
 const drawer = 'drawer';
+String name ='';

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:job4u/business_logic/cubit/register_cubit/register_cubit.dart';
+import 'package:job4u/business_logic/cubit/auth_cubit/auth_cubit.dart';
+import 'package:job4u/business_logic/cubit/auth_cubit/auth_cubit.dart';
 import 'package:job4u/pages/homePage.dart';
-import 'package:job4u/services/TextField.dart';
 
 import '../services/colors.dart';
 var _formKey =  GlobalKey<FormState>();
@@ -16,8 +16,8 @@ class SignUpPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var cubit = BlocProvider.of<RegisterCubit>(context);
-    return BlocConsumer<RegisterCubit, RegisterState>(
+    var cubit = BlocProvider.of<AuthCubit>(context);
+    return BlocConsumer<AuthCubit, AuthState>(
       listener:  (context, state) {
         if (state is UserCreateSuccessState) {
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) =>  homePage()));
