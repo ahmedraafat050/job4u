@@ -7,7 +7,7 @@ import 'package:job4u/constant/comstants.dart';
 
 import '../services/colors.dart';
 import 'homePage.dart';
-import 'signInPage.dart';
+import 'register/signInPage.dart';
 
 class loadingPage extends StatefulWidget {
   const loadingPage({Key? key}) : super(key: key);

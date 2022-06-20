@@ -4,31 +4,26 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:job4u/business_logic/cubit/auth_cubit/auth_cubit.dart';
 import 'package:job4u/business_logic/cubit/auth_cubit/auth_cubit.dart';
 import 'package:job4u/pages/homePage.dart';
-import 'package:job4u/pages/signUpPage.dart';
-import 'package:job4u/services/colors.dart';
 
-import '../services/TextField.dart';
+import '../../services/colors.dart';
 
-var _formKey = new GlobalKey<FormState>();
+var _formKey =  GlobalKey<FormState>();
 
-class SignInPage extends StatelessWidget {
-  SignInPage({Key? key}) : super(key: key);
+class SignUpPage extends StatelessWidget {
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
-
-
-
+  var nameController = TextEditingController();
+   SignUpPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var cubit = BlocProvider.of<AuthCubit>(context);
     return BlocConsumer<AuthCubit, AuthState>(
-      listener: (context, state) {
-        if (state is LoginSuccessState) {
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) =>  homePage()));
+      listener:  (context, state) {
+        if (state is UserCreateSuccessState) {
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) =>  homePage()));
         }
-        if (state is LoginErrorState) {
+        if (state is UserCreateErrorState) {
           Fluttertoast.showToast(
             msg: state.error,
           );
@@ -40,7 +35,7 @@ class SignInPage extends StatelessWidget {
           appBar: AppBar(
             backgroundColor: mainColor,
             title: Text(
-              "Sign In",
+              "Sign Up",
               style: TextStyle(
                 color: secColor,
                 fontFamily: "Righteous",
@@ -48,26 +43,45 @@ class SignInPage extends StatelessWidget {
               ),
             ),
           ),
-          body: Center(
+          body: Container(
+            margin: const EdgeInsets.all(8.0),
             child: SingleChildScrollView(
               child: Form(
                 key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Padding(
                       padding: EdgeInsets.only(bottom: 24.0),
                       child: Image(
-                        width: 70,
-                        height: 70,
+                        width: 60,
+                        height: 60,
                         fit: BoxFit.fill,
                         alignment: Alignment.center,
                         image: AssetImage("assets/icons/Icon.png"),
                       ),
                     ),
                     TextFormField(
-                      keyboardType: TextInputType.emailAddress,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return " User name is empty ";
+                        }
+                        return null;
+                      },
+                      controller: nameController,
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.person),
+                        labelText: 'User Name',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      autofocus: false,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    TextFormField(
                       controller: emailController,
                       validator: (value) =>
                       value!.isEmpty ? 'please enter your email' : null,
@@ -84,13 +98,14 @@ class SignInPage extends StatelessWidget {
                       height: 20,
                     ),
                     TextFormField(
-
                       obscureText: cubit.isPasswordShown,
+                      validator: (value) =>
+                      value!.isEmpty ? 'please enter your password ' : null,
                       controller: passwordController,
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.lock_outline),
                         suffixIcon: IconButton(
-                          icon: cubit.suffixIcon,
+                          icon:cubit.suffixIcon,
                           onPressed: () {
                             cubit.changeSuffixIcon();
                           },
@@ -101,68 +116,34 @@ class SignInPage extends StatelessWidget {
                         ),
                       ),
                       autofocus: false,
-                      validator: (value) =>
-                      value!.isEmpty ? 'Password is empty ' : null,
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        if (_formKey.currentState!.validate()) {
-                          print(emailController.text);
-                          print(passwordController.text);
-                        }
-                      },
-                      child: GestureDetector(
-                        onTap: () {
+                    Padding(
+                      padding: const EdgeInsets.all(30.0),
+                      child: ElevatedButton(
+                        onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            cubit.userLogin(
+                            cubit.userRegister(
+                                name: nameController.text.trim(),
                                 email: emailController.text.trim(),
                                 password: passwordController.text.trim());
                           }
                         },
-                        child: Container(
-                          child: Center(
-                            child: Text(
-                              'Log In',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                              ),
-                            ),
+                        style: ElevatedButton.styleFrom(
+                          primary: mainColor,
+                          minimumSize: const Size(
+                            60,
+                            50,
                           ),
-                          width: 80,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: Colors.grey,
-                           ),
+                        ),
+                        child: Text(
+                          "Sign Up",
+                          style: TextStyle(
+                            color: secColor,
+                            fontSize: 21,
+                          ),
                         ),
                       ),
                     ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    BlocProvider(
-                                      create: (context) => AuthCubit(),
-                                      child: SignUpPage(),
-                                    )));
-                      },
-                      style: ElevatedButton.styleFrom(
-                        primary: const Color(0x00ffffff),
-                        shadowColor: const Color(0x00ffffff),
-                      ),
-                      child: const Text(
-                        "Sign Up",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 14,
-                        ),
-                      ),
-                    )
                   ],
                 ),
               ),

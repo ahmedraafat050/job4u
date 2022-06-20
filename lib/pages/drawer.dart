@@ -1,11 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:job4u/business_logic/cubit/auth_cubit/auth_cubit.dart';
 import 'package:job4u/constant/comstants.dart';
-import 'package:job4u/models/user_model.dart';
 import 'package:job4u/pages/aboutUs.dart';
 import 'package:job4u/pages/sections/DoctorSection.dart';
 import 'package:job4u/pages/sections/EducationSection.dart';
@@ -19,7 +16,6 @@ import 'package:job4u/pages/sections/programmingSection.dart';
 import 'package:job4u/pages/sections/scienceSection.dart';
 import 'package:job4u/services/colors.dart';
 
-import '../constant/bloc_observer.dart';
 
 class DrawerMenu extends StatelessWidget {
   const DrawerMenu({Key? key}) : super(key: key);

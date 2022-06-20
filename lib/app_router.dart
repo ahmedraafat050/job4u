@@ -3,9 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:job4u/business_logic/cubit/auth_cubit/auth_cubit.dart';
 import 'package:job4u/pages/homePage.dart';
 import 'package:job4u/pages/loadingPage.dart';
-import 'package:job4u/pages/signInPage.dart';
-import 'package:job4u/pages/signUpPage.dart';
-
+import 'package:job4u/pages/register/signInPage.dart';
+import 'package:job4u/pages/register/signUpPage.dart';
 import 'constant/comstants.dart';
 
 class AppRouter {

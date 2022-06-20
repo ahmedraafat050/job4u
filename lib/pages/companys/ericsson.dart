@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:job4u/pages/apply/ericssonApply.dart';
-import 'package:job4u/pages/homePage.dart';
-
 import '../../services/colors.dart';
+
 
 class Ericsson extends StatelessWidget {
   const Ericsson({Key? key}) : super(key: key);

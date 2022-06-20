@@ -1,11 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:job4u/business_logic/cubit/auth_cubit/auth_cubit.dart';
 import 'package:job4u/constant/comstants.dart';
-import 'package:job4u/pages/loadingPage.dart';
-
 import 'app_router.dart';
 import 'constant/bloc_observer.dart';
 

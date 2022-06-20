@@ -2,27 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:job4u/business_logic/cubit/auth_cubit/auth_cubit.dart';
-import 'package:job4u/business_logic/cubit/auth_cubit/auth_cubit.dart';
 import 'package:job4u/pages/homePage.dart';
+import 'package:job4u/pages/register/signUpPage.dart';
+import 'package:job4u/services/colors.dart';
 
-import '../services/colors.dart';
-var _formKey =  GlobalKey<FormState>();
 
-class SignUpPage extends StatelessWidget {
+var _formKey = new GlobalKey<FormState>();
+
+class SignInPage extends StatelessWidget {
+  SignInPage({Key? key}) : super(key: key);
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
-  var nameController = TextEditingController();
-   SignUpPage({Key? key}) : super(key: key);
+
+
+
 
   @override
   Widget build(BuildContext context) {
     var cubit = BlocProvider.of<AuthCubit>(context);
     return BlocConsumer<AuthCubit, AuthState>(
-      listener:  (context, state) {
-        if (state is UserCreateSuccessState) {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) =>  homePage()));
+      listener: (context, state) {
+        if (state is LoginSuccessState) {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) =>  homePage()));
         }
-        if (state is UserCreateErrorState) {
+        if (state is LoginErrorState) {
           Fluttertoast.showToast(
             msg: state.error,
           );
@@ -34,7 +38,7 @@ class SignUpPage extends StatelessWidget {
           appBar: AppBar(
             backgroundColor: mainColor,
             title: Text(
-              "Sign Up",
+              "Sign In",
               style: TextStyle(
                 color: secColor,
                 fontFamily: "Righteous",
@@ -42,45 +46,26 @@ class SignUpPage extends StatelessWidget {
               ),
             ),
           ),
-          body: Container(
-            margin: const EdgeInsets.all(8.0),
+          body: Center(
             child: SingleChildScrollView(
               child: Form(
                 key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Padding(
                       padding: EdgeInsets.only(bottom: 24.0),
                       child: Image(
-                        width: 60,
-                        height: 60,
+                        width: 70,
+                        height: 70,
                         fit: BoxFit.fill,
                         alignment: Alignment.center,
                         image: AssetImage("assets/icons/Icon.png"),
                       ),
                     ),
                     TextFormField(
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return " User name is empty ";
-                        }
-                        return null;
-                      },
-                      controller: nameController,
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.person),
-                        labelText: 'User Name',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                      autofocus: false,
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    TextFormField(
+                      keyboardType: TextInputType.emailAddress,
                       controller: emailController,
                       validator: (value) =>
                       value!.isEmpty ? 'please enter your email' : null,
@@ -97,14 +82,13 @@ class SignUpPage extends StatelessWidget {
                       height: 20,
                     ),
                     TextFormField(
+
                       obscureText: cubit.isPasswordShown,
-                      validator: (value) =>
-                      value!.isEmpty ? 'please enter your password ' : null,
                       controller: passwordController,
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.lock_outline),
                         suffixIcon: IconButton(
-                          icon:cubit.suffixIcon,
+                          icon: cubit.suffixIcon,
                           onPressed: () {
                             cubit.changeSuffixIcon();
                           },
@@ -115,34 +99,68 @@ class SignUpPage extends StatelessWidget {
                         ),
                       ),
                       autofocus: false,
+                      validator: (value) =>
+                      value!.isEmpty ? 'Password is empty ' : null,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(30.0),
-                      child: ElevatedButton(
-                        onPressed: () {
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        if (_formKey.currentState!.validate()) {
+                          print(emailController.text);
+                          print(passwordController.text);
+                        }
+                      },
+                      child: GestureDetector(
+                        onTap: () {
                           if (_formKey.currentState!.validate()) {
-                            cubit.userRegister(
-                                name: nameController.text.trim(),
+                            cubit.userLogin(
                                 email: emailController.text.trim(),
                                 password: passwordController.text.trim());
                           }
                         },
-                        style: ElevatedButton.styleFrom(
-                          primary: mainColor,
-                          minimumSize: const Size(
-                            60,
-                            50,
+                        child: Container(
+                          child: Center(
+                            child: Text(
+                              'Log In',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                              ),
+                            ),
                           ),
-                        ),
-                        child: Text(
-                          "Sign Up",
-                          style: TextStyle(
-                            color: secColor,
-                            fontSize: 21,
+                          width: 80,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: mainColor,
                           ),
                         ),
                       ),
                     ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    BlocProvider(
+                                      create: (context) => AuthCubit(),
+                                      child: SignUpPage(),
+                                    )));
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: const Color(0x00ffffff),
+                        shadowColor: const Color(0x00ffffff),
+                      ),
+                      child: const Text(
+                        "Sign Up",
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 14,
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),

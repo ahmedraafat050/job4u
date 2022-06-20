@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:job4u/constant/bloc_observer.dart';
 import 'package:job4u/models/user_model.dart';
 import 'package:meta/meta.dart';
 
@@ -12,11 +11,10 @@ part 'auth_state.dart';
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(AuthInitial());
 
-  late String name;
 
   void userLogin({required String email, required String password}) {
-    emit(LoadingState());
 
+    emit(LoadingState());
     FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password)
         .then((value) {
@@ -28,6 +26,7 @@ class AuthCubit extends Cubit<AuthState> {
     });
   }
 
+
   Widget suffixIcon = Icon(Icons.remove_red_eye_outlined);
   bool isPasswordShown = false;
 
@@ -36,12 +35,28 @@ class AuthCubit extends Cubit<AuthState> {
     suffixIcon = isPasswordShown
         ? Icon(Icons.visibility_off)
         : Icon(Icons.remove_red_eye_outlined);
-    emit(ChangeLoginPasswordMode());
+   emit(ChangeLoginPasswordMode());
   }
 
-  Future<void> logOut() async {
+    Future<void> logOut() async {
     FirebaseAuth.instance.signOut();
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   void userRegister({
     required String email,
@@ -91,27 +106,36 @@ class AuthCubit extends Cubit<AuthState> {
     });
   }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   User getLoginUser() {
     User firebaseUser = FirebaseAuth.instance.currentUser!;
-    return firebaseUser;
+return firebaseUser;
   }
 
-  readUser() async {
-    final fireBaseUSer = await FirebaseAuth.instance.currentUser!;
 
-    if (fireBaseUSer != null) {
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(fireBaseUSer.uid)
-          .get()
-          .then((ds) {
-        //   name = ds.data['name'];
-        //print(name);
-      }).catchError((e) {
-        print(e.toString());
-      });
-    }
-  }
+
+
+
+
+
+
+
+
+
+
 
   late DocumentSnapshot ds;
 
@@ -122,9 +146,7 @@ class AuthCubit extends Cubit<AuthState> {
         .get()
         .then((DocumentSnapshot documentSnapshot) {
       if (documentSnapshot.exists) {
-       // print('Document data: ${documentSnapshot.data()}');
-        name = documentSnapshot['name'];
-       // print('name is' + name);
+
       } else {
         print('Document does not exist on the database');
       }
@@ -133,6 +155,5 @@ class AuthCubit extends Cubit<AuthState> {
     return ds;
   }
 
-  String token ="";
-  late String uId =FirebaseAuth.instance.currentUser!.uid;
+
 }
